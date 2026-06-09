@@ -45,7 +45,7 @@ class QuizManager:
     
     def attempt_quiz(self):
         for idx, q in enumerate(self.questions):
-            st.write(f"Question {idx + 1}: {q['question']}")
+            st.write(f"Questions {idx + 1}: {q['question']}")
             if q["type"] == "MCQ":
                 options = q["options"]
                 user_answer = st.radio("Select an option:", options, key=f"mcq_{idx}")
