@@ -15,7 +15,7 @@ pipeline {
             steps {
                 echo 'Building Docker image...'
                 script {
-                    sh 'sudo docker build -t ${DOCKER_HUB_REPO}:latest .'
+                    dockerImage = docker.build("${DOCKER_HUB_REPO}:latest")
                 }
             }
         }
