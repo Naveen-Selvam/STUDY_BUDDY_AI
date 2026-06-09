@@ -41,7 +41,6 @@ pipeline {
                     chmod +x argocd
                     mv argocd /usr/local/bin/argocd 
                     '''
-                }
             }
         }
         stage('Apply Kubernetes & Sync App with ArgoCD') {
