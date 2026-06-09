@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    enviroment {
+    environment {
         DOCKER_HUB_REPO = "naveen583/studybuddy"
         DOCKER_HUB_CREDENTIALS_ID = "dockerhub-token"
     }
@@ -20,7 +20,7 @@ pipeline {
         stage('Push Image to DockerHub') {
             steps {
                 echo 'Pushing Docker image to DockerHub...'
-                docker.withDockerRegistry(credentialsId: "${DOCKER_HUB_CREDENTIALS_ID}", url: 'https://registry.hub.docker.com') {
+                docker.withRegistry('https://registry.hub.docker.com' , "${DOCKER_HUB_CREDENTIALS_ID}") {
                     dockerImage.push('latest')
                 }
             }
