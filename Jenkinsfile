@@ -23,8 +23,8 @@ pipeline {
             steps {
                 echo 'Pushing Docker image to DockerHub...'
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', "${DOCKER_HUB_CREDENTIALS_ID}") {
-                        dockerImage.push('latest')
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-token') {
+                        docker.image("${DOCKER_HUB_REPO}:latest").push('latest')
                     }
                 }
             }
@@ -40,4 +40,4 @@ pipeline {
         //     }
         // }
     }
-} 
+}
