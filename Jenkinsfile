@@ -29,15 +29,33 @@ pipeline {
                 }
             }
         }
-        // stage('Install Kubectl & ArgoCD CLI') {
-        //     steps {
-        //         echo 'Installing Kubectl and ArgoCD CLI...'
-        //     }
-        // }
-        // stage('Apply Kubernetes & Sync App with ArgoCD') {
-        //     steps {
-        //         echo 'Applying Kubernetes and syncing with ArgoCD...'
-        //     }
-        // }
+        stage('Install Kubectl & ArgoCD CLI') {
+            steps {
+                echo 'Installing Kubectl and ArgoCD CLI...'
+                sh '''
+                    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+                    chmod +x kubectl
+                    mv kubectl /usr/local/bin/kubectl
+                    
+                    curl -sSL -o argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+                    chmod +x argocd
+                    mv argocd /usr/local/bin/argocd 
+                    '''
+                }
+            }
+        }
+        stage('Apply Kubernetes & Sync App with ArgoCD') {
+            steps {
+                script {
+                    kubeconfig = (credentials : 'kube-config', serverUrl : 'https://192.168.49.2:8443')
+
+                    echo 'Applying Kubernetes manifests...'
+                    sh '''
+                        argocd login 35.255.140.102:31704 --username admin --password $(kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d) --insecure
+                        argocd app sync studybuddy
+                    '''
+                }
+            }
+        }
     }
 }
